@@ -20,6 +20,16 @@ export class CreateManagers1737202502427 implements MigrationInterface {
                         length: '50',
                     },
                     {
+                        name: 'username',
+                        type: 'varchar',
+                        length: '50',
+                    },
+                    {
+                        name: 'password',
+                        type: 'varchar',
+                        length: '150',
+                    },
+                    {
                         name: 'email',
                         type: 'varchar',
                         isNullable: true,
