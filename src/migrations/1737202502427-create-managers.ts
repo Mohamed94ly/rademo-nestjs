@@ -20,9 +20,9 @@ export class CreateManagers1737202502427 implements MigrationInterface {
                         length: '30',
                     },
                     {
-                        name: 'disabled',
+                        name: 'enabled',
                         type: 'boolean',
-                        default: false
+                        default: true
                     }
                 ]
             })
