@@ -1,29 +1,30 @@
 import { registerAs } from "@nestjs/config";
 import { config as dotenvConfig } from 'dotenv';
-import { join } from "path";
+import { authPayloadDto } from "src/auth/dto/auth.dto";
+import { Manager } from "src/manager/entities/manager.entity";
 import { DataSource, DataSourceOptions } from "typeorm";
 
 dotenvConfig({ path: '.env' });
 
 const config = {
     type: 'postgres',
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
+    host: 'localhost',
+    port: 5432,
+    database: 'radius',
+    username: 'radius',
+    password: 'radius202525',
     synchronize: false,
     dropSchema: false,
     logging: false,
     logger: 'file',
-    entities: [__dirname + "src/**/**/*.entity{.ts,.js}"],
-    //entities: ['dist/**/*.entity{.ts,.js}'],
-    migrations: ["src/migrations/*{.ts,.js}"],
-    autoLoadEntities: true,
+    entities: [__dirname + "/auth/dto/auth.dto.ts", __dirname + "/**/**/*.entity{.ts,.js}"],
+    //entities: [Manager],
+    migrations: [__dirname + "/src/migrations/*{.ts,.js}"],
+    //autoLoadEntities: true,
     migrationsTableName: 'rd_migration',
     cli: {
-        migrationsDir: __dirname + '/migrations/',
-      },
+        migrationsDir: __dirname + 'src/migrations/',
+      }
 }
 
 export default registerAs('typeorm', () => config)

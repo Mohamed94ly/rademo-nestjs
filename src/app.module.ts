@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import typeorm from './config/typeorm';
+import { ManagerModule } from './manager/manager.module';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import typeorm from './config/typeorm';
       inject: [ConfigService],
       useFactory: async(configService: ConfigService) => (configService.get('typeorm'))
     }),
-    AuthModule],
+    AuthModule, ManagerModule],
   controllers: [AppController],
   providers: [AppService],
   exports:[AppService]

@@ -48,6 +48,7 @@ export class CreateManagers1737202502427 implements MigrationInterface {
                         name: 'username',
                         type: 'varchar',
                         length: '50',
+                        isUnique: true,
                     },
                     {
                         name: 'password',
