@@ -1,8 +1,33 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
 export class CreateManagers1737202502427 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.createTable(
+            new Table({
+                name: 'rd_roles',
+                columns:[
+                    {
+                        name: 'id',
+                        type: 'int',
+                        isPrimary: true,
+                        isGenerated: true,
+                        generationStrategy: 'increment',
+                    },
+                    {
+                        name: 'name',
+                        type: 'varchar',
+                        length: '30',
+                    },
+                    {
+                        name: 'disabled',
+                        type: 'boolean',
+                        default: false
+                    }
+                ]
+            })
+        )
+
         await queryRunner.createTable(
             new Table({
                 name: 'rd_managers',
@@ -45,17 +70,35 @@ export class CreateManagers1737202502427 implements MigrationInterface {
                         isNullable: true,
                     },
                     {
-                        name: 'role',
+                        name: 'roleId',
                         type: 'int',
                         isNullable: true
                     },
                 ],
             }),
         )
+
+        await queryRunner.createForeignKey(
+            'rd_managers',
+            new TableForeignKey({
+                columnNames: ['roleId'],
+                referencedColumnNames: ['id'],
+                referencedTableName: 'rd_roles',
+                onDelete: "CASCADE",
+            }),
+        )
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        const table = await queryRunner.getTable('rd_managers');
+        const foreignKey = table.foreignKeys.find(
+            (fk) =>fk.columnNames.indexOf('roleId') !== -1,
+        );
+
+        await queryRunner.dropForeignKey('rd_managers', foreignKey)
+        await queryRunner.dropColumn('rd_managers', 'roleId')
         await queryRunner.dropTable('rd_managers');
+        await queryRunner.dropTable('rd_roles');
     }
 
 }
